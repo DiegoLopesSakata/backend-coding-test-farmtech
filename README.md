@@ -1,3 +1,6 @@
+## Estrutura do projeto
+A aplicação Spring Boot está localizada na pasta `product/`.git s
+
 # Teste de Backend - FarmTech
 
 Este repositório contém o desafio técnico de backend. O objetivo é propor um exercício compreensível de Java e Spring Boot.
