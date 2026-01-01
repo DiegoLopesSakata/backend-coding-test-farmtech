@@ -1,5 +1,5 @@
 ## Estrutura do projeto
-A aplicação Spring Boot está localizada na pasta `product/`.git s
+A aplicação Spring Boot está localizada na pasta `product/`.
 
 # Teste de Backend - FarmTech
 
