@@ -7,14 +7,14 @@ import jakarta.validation.constraints.Size;
 @Embeddable
 public class Farmer {
 
-    @NotBlank
+    @NotBlank(message="Farmer document is required")
     private String document;
 
-    @NotBlank
+    @NotBlank(message="Farm name is required")
     private String farmName;
 
-    @NotBlank
-    @Size(min = 2, max = 2)
+    @NotBlank(message="State is required")
+    @Size(min = 2, max = 2, message="State must have exactly 2 characters")
     private String state;
 
     public String getDocument() {
