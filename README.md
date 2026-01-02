@@ -180,3 +180,5 @@ mvn spring-boot:run
 - O projeto segue uma separação clara de camadas (controller, service, repository).
 
 - As validações e mensagens de erro são tratadas para facilitar o consumo da API.
+
+Este projeto foi desenvolvido como parte de um desafio técnico, com foco em clareza, simplicidade, validações de negócio e documentação automática da API via Swagger (OpenAPI).
