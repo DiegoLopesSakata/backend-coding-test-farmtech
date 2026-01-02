@@ -1,132 +1,182 @@
+# Product API - Spring Boot
+
+Esta aplicação é um microserviço desenvolvido com **Spring Boot** para cadastro, edição e listagem de produtos, utilizando banco de dados em memória **H2** e documentação via **Swagger (SpringDoc OpenAPI)**.
+
 ## Estrutura do projeto
-A aplicação Spring Boot está localizada na pasta `product/`.
 
-# Teste de Backend - FarmTech
+A aplicação Spring Boot está localizada na pasta: product/
 
-Este repositório contém o desafio técnico de backend. O objetivo é propor um exercício compreensível de Java e Spring Boot.
+É necessário acessar essa pasta para executar os comandos Maven, pois nela está localizado o arquivo `pom.xml`.
 
-## Objetivo
-Criar um microserviço para cadastro, edição e listagem de produtos usando **Spring Boot** e banco de dados em memória **H2**. A documentação da API deve estar disponível via **Swagger/SpringDoc**.
+## Tecnologias utilizadas
 
-## O que você precisa entregar
-- Código-fonte versionado neste repositório (pode criar um fork ou abrir um novo repositório público).
-- API com operações de **criar**, **editar** e **listar** produtos.
-- Documentação acessível em `/swagger-ui.html` ou `/swagger-ui/index.html`.
-- Instruções simples para executar o projeto localmente.
+- Java 17+
+- Spring Boot
+- Spring Web
+- Spring Data JPA
+- H2 Database
+- SpringDoc OpenAPI (Swagger)
+- Maven
 
-## Requisitos funcionais
-Cada produto deve possuir:
-- **Nome** (obrigatório, sem espaços em branco, mínimo 3 caracteres, não pode haver nomes repetidos).
-- **Status** com os valores: `Active`, `Inactive`, `Discontinued`, `In Testing`.
-- **Data de criação** e **data de atualização**.
+## Funcionalidades implementadas
 
-### Exemplo de contratos de API (contexto: agricultura e produtores rurais)
-Use esses exemplos como referência para modelar seus endpoints. As rotas e nomes podem variar, desde que respeitem as regras de negócio.
+A API disponibiliza operações para:
 
-- **Create product**
-  - `POST /products`
-  - Request body:
-    ```json
-    {
-      "name": "Premium corn seeds",
-      "status": "Active",
-      "farmer": {
-        "document": "12345678900",
-        "farmName": "Fazenda Santa Luzia",
-        "state": "GO"
-      }
-    }
-    ```
-  - Response (201):
-    ```json
-    {
-      "id": 1,
-      "name": "Premium corn seeds",
-      "status": "Active",
-      "farmer": {
-        "document": "12345678900",
-        "farmName": "Fazenda Santa Luzia",
-        "state": "GO"
-      },
-      "createdAt": "2024-05-10T12:00:00Z",
-      "updatedAt": "2024-05-10T12:00:00Z"
-    }
-    ```
-
-- **Update product**
-  - `PUT /products/{id}`
-  - Request body (example changing product name and status):
-    ```json
-    {
-      "name": "Premium corn seeds harvest 24/25",
-      "status": "In Testing",
-      "farmer": {
-        "document": "12345678900",
-        "farmName": "Fazenda Santa Luzia",
-        "state": "GO"
-      }
-    }
-    ```
-
-- **List products**
-  - `GET /products`
-  - Response (200):
-    ```json
-    [
-      {
-        "id": 1,
-        "name": "Premium corn seeds harvest 24/25",
-        "status": "In Testing",
-        "farmer": {
-          "document": "12345678900",
-          "farmName": "Fazenda Santa Luzia",
-          "state": "GO"
-        },
-        "createdAt": "2024-05-10T12:00:00Z",
-        "updatedAt": "2024-05-12T09:30:00Z"
-      }
-    ]
-    ```
-
-- **Get product by ID**
-  - `GET /products/{id}`
-  - Response (200): same shape as the `POST` and `PUT` examples.
+- Criar produtos
+- Editar produtos
+- Listar produtos
+- Buscar produto por ID
 
 ### Regras de negócio
-- Não pode existir produto com o mesmo nome.
-- Não pode existir produto com nome em branco ou com menos de 3 caracteres.
-- Utilize os métodos REST correspondentes a cada ação:
-  - `GET` para listar ou buscar.
-  - `POST` para criar.
-  - `PUT` para editar.
 
-## Passo a passo sugerido
-1. **Criar o projeto**: use Spring Initializr com as dependências Web, H2 Database e SpringDoc OpenAPI.
-2. **Modelar a entidade** `Produto` com os campos indicados e validações simples.
-3. **Criar o repositório** usando Spring Data JPA para salvar e buscar dados no H2.
-4. **Implementar o controlador REST** com endpoints para criar, editar e listar produtos.
-5. **Adicionar a documentação** com SpringDoc (OpenAPI) para expor a interface no Swagger UI.
-6. **Testar localmente** chamando os endpoints (Postman, cURL ou Swagger UI).
+- O nome do produto é obrigatório
+- O nome não pode conter apenas espaços em branco
+- O nome deve possuir no mínimo 3 caracteres
+- Não pode existir mais de um produto com o mesmo nome
+- O campo Status é case-insensitive (ex: "active", "Active", "IN TESTING")
+- Cada produto possui:
+  - Nome
+  - Status (`Active`, `Inactive`, `Discontinued`, `In Testing`)
+  - Data de criação
+  - Data de atualização
 
-## Como executar localmente
-1. Certifique-se de ter **Java 17+** e **Maven** instalados.
-2. Instale as dependências e execute a aplicação:
-   ```bash
-   mvn spring-boot:run
-   ```
-3. A aplicação deve subir em `http://localhost:8080`. A interface do Swagger costuma ficar em:
+## Endpoints principais
+
+### Criar produto
+**POST** `/products`
+
+Request body:
+```json
+{
+  "name": "Premium corn seeds",
+  "status": "active",
+  "farmer": {
+    "document": "12345678900",
+    "farmName": "Fazenda Santa Luzia",
+    "state": "GO"
+  }
+}
+```
+
+Response (201):
+```json
+{
+  "id": 1,
+  "name": "Premium corn seeds",
+  "status": "ACTIVE",
+  "farmer": {
+    "document": "12345678900",
+    "farmName": "Fazenda Santa Luzia",
+    "state": "GO"
+  },
+  "createdAt": "2026-01-02T14:18:15.9533101",
+  "updatedAt": "2026-01-02T14:18:15.9533101"
+}
+```
+### Atualizar Produto
+**PUT** `/products/{id}`
+
+Request Body (exemplo mudando o nome do produto e status):
+
+```json
+{
+  "name": "Premium corn seeds harvest 24/25",
+  "status": "in testing",
+  "farmer": {
+    "document": "12345678900",
+    "farmName": "Fazenda Santa Luzia",
+    "state": "GO"
+  }
+}
+```
+
+Response (200):
+```json
+{
+  "id": 1,
+  "name": "Premium corn seeds harvest 24/25",
+  "status": "IN_TESTING",
+  "farmer": {
+    "document": "12345678900",
+    "farmName": "Fazenda Santa Luzia",
+    "state": "GO"
+  },
+  "createdAt": "2026-01-02T14:16:27.595444",
+  "updatedAt": "2026-01-02T14:21:45.974353"
+}
+```
+
+### Listar produtos
+**GET** `/products`
+```json
+[
+  {
+    "id": 1,
+    "name": "Premium corn seeds harvest 24/25",
+    "status": "IN_TESTING",
+    "farmer": {
+      "document": "12345678900",
+      "farmName": "Fazenda Santa Luzia",
+      "state": "GO"
+    },
+    "createdAt": "2026-01-02T14:16:27.595444",
+    "updatedAt": "2026-01-02T14:21:45.974353"
+  }
+]
+```
+
+### Buscar produto por ID
+**GET** `/products/{id}`
+
+Response (200): mesmo formato que os exemplos de POST e PUT.
+
+## Documentação da API (Swagger)
+A documentação da API é gerada automaticamente utilizando SpringDoc OpenAPI e pode ser acessada após a aplicação estar em execução.
+
+Além de documentar os endpoints, o Swagger também pode ser utilizado para testar a API diretamente pelo navegador.
+
+URL da documentação:
+
+http://localhost:8080/swagger-ui.html
+
+ou
+
+http://localhost:8080/swagger-ui/index.html
+
+## Como executar o projeto localmente
+1. **Pré-requisitos**
+    - Java 17 ou superior
+
+    - Maven instalado
+
+2. **Acessar a pasta do projeto**
+No terminal, navegue até a pasta onde está localizado o arquivo pom.xml:
+
+```bash
+cd product
+```
+3. **Gerar o build do projeto**
+Execute o comando:
+
+```bash
+mvn clean install
+```
+4. **Executar a aplicação**
+Após o build, execute:
+
+```bash
+mvn spring-boot:run
+```
+5. **Acessar a aplicação**
+ A aplicação deve subir em `http://localhost:8080`. A interface do Swagger costuma ficar em:
    - `http://localhost:8080/swagger-ui.html`, ou
    - `http://localhost:8080/swagger-ui/index.html`
 
-## Critérios de avaliação
-- Organização do código e clareza das camadas (controller, service, repository).
-- Validações e mensagens de erro que façam sentido para quem está consumindo a API.
-- Uso correto dos métodos HTTP e dos códigos de status de resposta.
-- Qualidade da documentação da API (Swagger).
-- Simplicidade e clareza das instruções de execução no README.
+## Observações finais
+- O banco de dados H2 é executado em memória, portanto os dados são reiniciados a cada execução da aplicação.
 
-## Dicas finais
-- Não é necessário implementar autenticação ou autorização.
-- Mantenha o código e os nomes das classes/métodos autoexplicativos.
-- Commits pequenos e frequentes ajudam a entender sua linha de raciocínio.
-- Se tiver dúvidas, escreva comentários curtos no código ou documente no README.
+- Não há autenticação ou autorização implementadas.
+
+- O projeto segue uma separação clara de camadas (controller, service, repository).
+
+- As validações e mensagens de erro são tratadas para facilitar o consumo da API.
