@@ -1,18 +1,31 @@
 package com.farmtech.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum Status {
-    ACTIVE("Active"),
-    INACTIVE("Inactive"),
-    DISCONTINUED("Discontinued"),
-    IN_TESTING("In Testing");
 
-    private final String displayName;
+    ACTIVE,
+    INACTIVE,
+    DISCONTINUED,
+    IN_TESTING;
 
-    Status(String displayName) {
-        this.displayName = displayName;
+    @JsonCreator
+    public static Status fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        return Status.valueOf(
+            value
+                .trim()
+                .toUpperCase()
+                .replace(" ", "_")
+        );
     }
 
-    public String getDisplayName() {
-        return displayName;
+    @JsonValue
+    public String toValue() {
+        return this.name();
     }
 }
