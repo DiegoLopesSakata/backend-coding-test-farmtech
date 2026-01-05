@@ -29,21 +29,21 @@ public class ProductService {
 
     public Product update(Long id, Product product) {
 
-    Product existing = repository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        Product existing = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-    repository.findByName(product.getName())
-        .filter(p -> !p.getId().equals(id))
-        .ifPresent(p -> {
-            throw new BusinessException("Product name already exists");
-        });
+        repository.findByName(product.getName())
+            .filter(p -> !p.getId().equals(id))
+            .ifPresent(p -> {
+                throw new BusinessException("Product name already exists");
+            });
 
-    existing.setName(product.getName());
-    existing.setStatus(product.getStatus());
-    existing.setFarmer(product.getFarmer());
+        existing.setName(product.getName());
+        existing.setStatus(product.getStatus());
+        existing.setFarmer(product.getFarmer());
 
-    return repository.save(existing);
-}
+        return repository.save(existing);
+    }
 
 
     public List<Product> findAll() {

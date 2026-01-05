@@ -30,7 +30,7 @@ public class Product {
     @Size(min = 3, message="Product name must have at least 3 characters")
     private String name;
 
-    @NotNull
+    @NotNull(message="Product status is required")
     @Enumerated(EnumType.STRING)
     private Status status;
 

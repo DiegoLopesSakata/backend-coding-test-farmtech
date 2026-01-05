@@ -16,12 +16,15 @@ public enum Status {
             return null;
         }
 
-        return Status.valueOf(
-            value
-                .trim()
-                .toUpperCase()
-                .replace(" ", "_")
-        );
+        try {
+            return Status.valueOf(
+                value.trim().toUpperCase().replace(" ", "_")
+            );
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException(
+                "Invalid value for status. Allowed values: ACTIVE, INACTIVE, IN_TESTING, DISCONTINUED"
+            );
+        }
     }
 
     @JsonValue

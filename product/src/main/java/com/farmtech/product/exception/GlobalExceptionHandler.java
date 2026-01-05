@@ -30,17 +30,33 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiError> handleEnumError(HttpMessageNotReadableException ex) {
+    public ResponseEntity<ApiError> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+
+        Throwable cause = ex;
+
+        while (cause != null) {
+                if (cause instanceof IllegalArgumentException) {
+                ApiError error = new ApiError(
+                        HttpStatus.BAD_REQUEST.value(),
+                        cause.getMessage()
+                );
+
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(error);
+                }
+                cause = cause.getCause();
+        }
 
         ApiError error = new ApiError(
                 HttpStatus.BAD_REQUEST.value(),
-                "Invalid value for enum field (status)"
+                "Malformed JSON request"
         );
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(error);
-    }
+    }       
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiError> handleBusinessException(BusinessException ex) {
